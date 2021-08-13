@@ -1,0 +1,5 @@
+Sequential Model
+무엇이 Sequential modeling을 어렵게 만드는가
+
+Transformer
+Attention구조를 활용한 Sequential Model

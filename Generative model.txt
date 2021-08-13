@@ -1,0 +1,108 @@
+Generative Model
+일종의 분류 모델
+
+Tasks
+강아지 이미지가 있다고 하자.
+→ 강아지를 샘플링하고 싶거나
+   새로운 강아지를 만들어낸다.
+→ 이럴 때 확률분포 p(x)를 학습하고 싶다.
+   - Generation : 새로운 데이터를 생성할 수 있다.
+   - Density estimation
+     이미지가 주어졌을 때 확률값을 예측하여
+     이미지를 분류한다. (anomaly detection을 한다.)
+     explicit model : 입력이 주어졌을 때 확률값을 얻어낼 수 있는 모델
+     * implicit model : 새로운 데이터를 생성만 하는 모델
+    - 비지도 학습을 할 수 있다. 즉, 피쳐를 학습할 수 있다.
+
+○ p(x)의 파라미터 수 줄이기
+분류문제에서 p(x)의 파라미터가 매울 클 수 있다.
+→ markov assumption을 사용하여 파라미터를 줄인다.
+
+※ Conditional Independence
+- chain rule
+- Bayes' rule
+- Conditional independence
+- Markov assumption
+
+
+○ Auto-regressive model
+Mnist 데이터의 경우 28*28의 픽셀 데이터를예측해야한다.
+→ 즉, 784개의 파라미터를 학습해야한다.
+이럴 때 마코프 가정하에 체인룰을 이용하여
+마라피터를 줄여서 p(x)를 모델링 한것을 
+autoregressive model 이라고 한다.
+(자기회귀 모형)
+
+○ NADE : Neural Autoregressive Density Estimator
+- Xi번 째 픽셀을 X1 to Xi-1 필셀에 의존하도록 하는 모델
+  → X1은 그대로 신경망에 넣고 예측한다.
+  → Xi는 X1 to Xi-1값과 함께 신경망에 넣고 예측을 한다.
+     그렇기 때문에 신경망에서 고려할 파라미터 값이 많아진다.
+
+- NADE는 확률값을 예측할 수 있어 explicit model 이다.
+- p(x)가 연속형이라면 시그모이드 함수 대신 가우시안 믹스처 함수를 쓴다.
+
+○ Pixel RNN
+- fullyconnected layer를 이용하지 않고 RNN을 사용하겠다.
+- ordering에 따라 Row LSTM(위쪽 픽셀정보 활용), Diagonal BiLSTM(Bidirection을 하되 이전 픽셀을 모두 고려) 모델로 나뉜다.
+
+
+
+◎ Latent Variable Model
+* variational autoencoder는 generative model이나
+ autoencoder는 generative model이 아니다.
+
+  ○ Variational Auto-encoder
+    x라는 입력 공간이 있는데 이를 잘 표현하는 Latence space(z)(==p(z|x) == Posterior)를 찾고 싶은것 
+
+    - Variational inference
+      → posterior distribution을 찾는 것이 목적이다.
+        하지만 불가능한 경우가 많아 근사함수인 Variational distribution을
+        활용하는 경우가 많다. 
+      → 이를 위해 KL Divergence를 활용한다.
+
+      → ELBO(Evidence Lower BOund)를 키움으로써
+        반대급부로 원하는 objective를 얻는 방식이다.
+ 
+      → ELBO = Reconstruction Term - Prior Fitting Term(여기서 KL Divergence가 쓰임)
+         - Reconstruction Term : autoencoder에서의 Reconstruction Loss를 최소화 하는 항
+           → x라는 space를 encoder를 통해 latence space로 보낸다.
+            다시 decoder로 돌아오는 reconstruction loss를 줄이는 과정
+         - Prior Fitting Term : 잠재 분포가 Prior distribution과 유사하도록 하는 항
+           → x라는 이미지가 잔뜩 있는데 이를 latence space로 올려 놓는다.
+            그럼 이 분포가 내가 가정했던 Prior distribution과 비슷하게 만들어 준다.
+ 
+key limitation
+implicit model : 입력 - latence space - reconstruction - generate result(확인 필요)
+intaractable(다루기 힘든) model(likelihood를 계산하기 어려움)
+사전 함수 항이 미분 가능해야한다. 보통 isotropic 가우시안을 사용한다.
+
+ 
+○ Adversarial Auto-encoder
+KL Divergence에서 Prior distribution으로 가우시안을 사용하고 싶지 않을 때 사용
+→ Prior distribution을 GAN objective으로 바꾼 것
+
+
+○ GAN(Generative Adversarial Network)
+two player minimax game between generator and discriminator
+
+-(절차) Generator로 생성된 결과를 Discriminator가 분류하고 
+  이 결과를 다시 Generator가 학습하고 그 후 또다시 Discriminator가 학습을 반복하는 방식
+  → z -> G ->  fake  -> D -> true / false -> G업데이트  -> D 재학습             
+                  true
+- (학습 방식/목적) 고정된 Generator가 있을 때 Optimal한 Discriminator를 구해 이를 바탕으로 다시
+   Generator를 구한다. (결국 Jenson-Shannon Divergence를 줄이는 일이된다.)
+  → 이 때 Discriminator가 수렴함을 보장하기가 어렵다. (Adversarial Auto-encoderf를 다른 모델?로 해석할 때 활용된다.)
+
+
+  ● DCGAN - 이미지 도메인으로 구현된 모델
+  ● info-GAN - auxiliary c(class)를 매번 랜덤하게 넣어 Generation을 할때 특정 모드(class벡터)에 집중하도록하는 모델
+  ● Text2Image - 문장이 주어지면 이미지를 생성하는 모델
+  ● PuzzleGAN - 이미지의 일부(자동차의 바퀴, 문...)를 합쳐서 원래 이미지를 복원하는 모델 
+  ● CycleGAN - 이미지 사이의 도메인을 바꿔주는 모델 (말-> 얼룰말)
+  ● Star-GAN - 이미지를 컨트롤 할 수 있도록 하는 모델(슬픈표정, 헤어 변경...)
+  ● Progressive-GAN - 저차원에서 고차원으로 픽셀을 키워가며 학습을 시켜 좋은 성능의 이미지를 생성하는 모델
+
+
+
+

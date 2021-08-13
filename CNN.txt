@@ -1,0 +1,48 @@
+Convolution
+
+Convolutional Neural Networks
+convolution layer, pooling layer : feature extraction
+fully connected layer : descion making
+→ 파라미터 숫자에 의존하기 때문에 fully connected layer를 
+줄이는 추세
+
+
+Convolution Arithmetic
+
+
+Stride - 넓게 걷는다.
+kernel을 얼마나 dense(sparse)하게 찍을지를 정하는 지표
+* Stride = 1일 때, kernel을 매 픽셀마다 찍을 때
+
+Padding
+입력값을 덭에어 주는 것
+→ boundary 정보가 버려지는 것을 방지한다.
+→ 입력과 출력의 차원이 같아지게한다.
+
+1X1 Convolution
+Convolution layer를 깊게 쌓으면서 파라미터 수를 줄이는 방법
+
+
+
+Moder Convolutional Neural Network
+네트워크 깊이는 점점 깊어지고 파라미터는 점전 줄고
+성능은 높아진다.
+
+ILSVRC(대회 이름)
+Classification / Detection / Localization / Segmentation
+
+AlexNet
+
+VGGNet
+Receptive field
+
+
+
+
+Semantic Segmentation
+
+
+
+
+
+

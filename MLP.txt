@@ -1,0 +1,97 @@
+최적화
+
+Generalization
+훈련데이터가 테스트 데이터에도 잘 적용될 때
+모델이 일반화 되었다고 한다.
+
+Under-fitting vs overfitting
+언더피팅 : 훈련데이터와 테스트 데이터 모두에 모델이 잘 적용되지 않을 경우
+오버피팅 : 훈련데이터의 성능이 높으나 테스트 데이터에서는 그러지 못할 경우
+
+Bias-variance tradeoff
+Bias = 모수 - E[추정량]
+학습과정을 지속 할수록 편향의 값은 줄어들지만
+분산값은 증가하게 되어 특정 시점부터는 오버피팅 현상이 일어난다.
+
+
+Cross validation
+전체 데이터 셋을 동일한 크기의 k개의 부분 집합으로 나눈다.
+각 부분 집합을 전체 데이터셋에서 제외해 k개의 훈련 데이터를 만들어
+k번 학습을 한다.
+
+
+Bootstrapping
+학습데이터의 일부를 복원 추출하여 모델에 적합하는 과정을 반복하는 방식
+
+bagging and boosting
+bagging : 부트스트랩으로 얻은 모델들로 예측된 값들로부터 예측(예측된 값들의 평균)하는 방식
+boosting : 여러 모델을 시퀀셜하게 합쳐 하나의 모델을 만드는 방법
+간단한 모델을 학습데이터에 대해 적합시켜본다.
+→ 80%는 잘 예측하지만 20%를 예측을 잘 못한다면
+20%에 대한 모델을 하나 더 만든다. 
+→ 만들어진 모델(weak learners)를 시퀀셜하게 합쳐
+하나의 strong learners를 만든다.
+
+
+Gradient Descent Method
+
+SGD : 전체 데이터 모두 사용하는 방식 (a single sample)
+Mini-batch GD : 배치를 가지고 경사하강법을 진행하는 방식
+Batch GD : 전체 데이터 모두 사용하는 방식(whole data)
+
+?SGD vs Batch GD
+
+
+Batch-size Matters
+Large-batch size : shrap minimizers에 도달한다. (loss 그래프의 볼록한 정도가 크다.)
+Small-batch size : flat minimizers에 도달한다. (loss 그래프의 볼록한 정도가 작다.)
+
+→ Small-batch size의 경우 일반화 성능이 강화될 수 있다.
+
+
+Opimizer
+- GD
+- Momentum
+이전의 G값을 다음 G에 반영하는 방법으로 G의 관성을 유지하는 방식
+→ 물체가 움직이듯 학습을 진행한다.
+- Nesterov Accelerate
+Momentum에서 조금 변형된 방식
+→ 조금 더 빠르게 수렴하는 효과가 있다.
+- Adagrad
+학습동안에 신경망 parameter가 많이 변한 경우는 적게 변하도록 하게한다.
+반대로 신경망 parameter가 적게 변한 경우는 많이 변하도록 하게한다. 
+- Adadelta
+- RMSprop
+- Adam
+EMA + Momentum을 이용한 방식으로 일반적으로 가장 무난하게 사용하는 방식이다.
+
+
+
+Regularization : 학습에 규제를 가하는 것
+→ 학습을 방해하여 일반화 성능을 높이는 방법
+
+* 전처리 
+Normalization / Standardization 
+
+- Early stopping : 학습을 진행하다가 검증 데이터의 loss가 커지는 시점에서 중단한다.
+- parameter norm penalty : 특정 파라미터가 너무 커지지 않게한다.
+→ 부드러운 함수 일수록 일반화 성능이 높을 것이라는 것을 가정
+- Data augmetation
+데이터가 한정적일때 주어진 데이터를 라벨이 변하는 않는 한도내에서
+변환하여 데이터를 만들어 데이터의 양을 늘리는 방법
+- Noise robustness
+입력데이터와 weights(가중치)에 노이즈를 넣어주면 실험적으로
+더 높은 성능을 보이곤한다.
+- Label Smoothing
+학습데이터 두 개를 뽑아 섞어주어 결정 경계를 부드럽게 만들어주는 방식
+→ Mixup(사진합치기), Cutout(일부 영역 삭제), CutMix(특정영역 합쳐주기)
+
+- Dropout
+예측할 때 일부 가중치를 0으로 만들어주는 방법
+→ 각각의 뉴런들이 robust한 특징이 남을 수 있다.
+- Batch normalization
+layer의 값을 정규화 시키는 것을 말한다.
+
+
+
+

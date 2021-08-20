@@ -1,0 +1,69 @@
+○ Intorduction to Pytorch
+
+- 딥러닝은 프레임워크를 사용해야 한다.
+  → 대표적으로 Pytorch, TensorFlow
+
+- Keras vs TF vs Pytorch
+  (user ↔ Keras wrapper → TF, Pytorch)
+
+- Pytorch - Dynamic Computational Graph
+  (Define by run; 실행을 하면서 그래프를 생성하는 방식)
+  TensorFlow - Define and run 
+  (그래프를 먼저 정의 후 실행시점에 데이터를 feed)
+
+  → (Pytorch의 경우) 코드가 훨씬 간결해 진다.
+
+      Why Pytorch
+  → 즉시 확인 가능 - pythonic code
+  → GPU support, Good API ana Community
+  → 사용하기 편한 장점이 가장 큼
+  → TF는 production과 scalability의 장점
+
+ 
+- Pytorch - Numpy + Autograd + Function
+   → Numpy 구조를 가지는 Tensor 객체로 array표현
+   → 자동미분을 지원하여 DL연산을 지원
+   → 다양한 형태의 DL을 지원하는 함수와 모델을 지원함
+
+○ Pytorch Basics
+Pytorch Operations (numpy + AutoGrad)
+
+- Tensor
+  → 다차원 Arrays를 표현하는 Pytorch 클래스
+  → numpy의 ndarray와 동일
+  → Tensor를 생성하는 함수도 거의 동일
+
+  → 생성 : t_array = torch.FloatTensor(n_array)
+  → 형태 확인 : t_array.ndim , t_array.shape
+  → Array to Tensor - Tensor 생성은 list나 ndarray를 사용가능
+     (torch.tensor(data_list), torch.from_numpy(nd_array_ex))
+  → Tensor가 가질수 있는 데이터 타입은 Numpy와 동일
+  → numpy like operations
+  → pytorch의 tensor는 GPU에 올려서 사용가능
+     (x_data.device #device(type='cpu')  / 
+      if torch.cuda.is_available(): x_data_cuda = x_data.to('cuda')
+      x_data_cuda.device)
+
+
+- Tensor handling
+  → view, squeeze, unsqueeze 등으로 tensor 조정가능
+     view : reshape과 동일하게 tensor의 shape을 변환
+     (reshape과는 contiguity 보장의 차이)
+     squeeze : 차원의 개수가 1인 차원을 삭제
+     unsqueeze : 차원의 개수가 1인 차원을 추가
+
+- Tensor operations
+  → tensor의 operations는 numpy와 동일
+  → 행렬곱셈 연산은 dot이 아닌 mm 사용
+     (dot : 벡터 곱셈 / mm : 행렬 곱셈 / matmul : 행렬 곱셈 & 브로드캐스팅)
+
+- Tensor operations for ML/DL formula
+  → nn.functional 모듈을 통해 다양한 수식 변환을 지원함
+      (ie. F.softmax(), F.functional.one_hot()...)
+
+
+- AutoGrad
+  → Pytorch의 핵심은 자동 미분의 지원 - backward 함수 사용
+
+
+○ Pytorch project Template Overview

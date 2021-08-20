@@ -1,0 +1,102 @@
+○ AutoGrad & Optimizer
+
+강의 소개
+Optimizer
+nn.Module - 네트워크 텐서 모듈
+nn.Parameter - Module 내부에서의 역할
+Backward 함수가 작동하는 방식을 직접 구현
+
+
+Further Question
+1. 1epoch에서 이루어지는 모델 학습과정 / 성능을 올리지 위한 방법
+2. optimizer.zero_grad()를 안하면 일어나는 일 / 매 batch step마다 항상 필요한지 여부
+
+
+강의 영상
+
+
+torch.nn.Module
+- 딥러닝을 구성하는 Layer의 base class
+- Input, Output, Forward, Backward 정의
+- 학습의 대상이 되는 parameter(tensor)정의
+
+
+nn.Parameter
+- Tesor 객체의 상속 객체
+- nn.Module 내에 attribute가 될 때는 required_grad=True
+ 로 지정되어 학습 대상이 되는 Tensor
+
+Backward
+- Layer에 있는 Parameter들의 미분 수행
+- Forward의 결과값과 실제값간의 차이(loss)에 대해 미분 수행
+- 해당 값으로 Parameter 업데이트
+→ Module에서 backward와 optimize 오버라이딩하여 직접 지정이
+  가능하나 사용자가 직접 미분수식을 작성해야하는 부담이 있다.
+
+
+
+
+
+Dataset & Dataloader
+
+강의 소개
+Dataset클래스 - Custom data(Image, Video, Text 등)을 Pytorch에 사용할 수 있도록 한다.
+Dataloader - 네트워크에 Batch 단위로 데이터를 로딩하는 방법
+
+Further Question
+1. DataLoader의 sampler들을 언제사용하는지?
+2. 데이터의 크기가 너무 커서 한번에 올릴 수 없을 때 Dataset에서
+어떻게 데이터를 불러오는게 좋은지?
+
+
+강의 영상
+
+모델에 데이터를 먹이는 방법
+
+
+Data(collected, cleaned, preprocessed) 
++ tranforms
+→ Dataset (__init__() , __len__() , __getItem__())
+→ DataLoader(batch, shuffle...)
+→ Model
+
+
+Dataset 클래스
+- 데이터 입력 형태를 정의하는 클래스
+- 데이터를 입력하는 방식의 표준화
+- 데이터의 형태에 따라 각 함수를 다르게 정의함
+→ 최근에는 HuggingFace등 표준화된 라이브러리 사용
+
+
+__init__ 메서드
+- 데이터의 위치나 파일명 초기화 작업
+- 데이터 파일을 불러오며 모든데이터를 메모리에 로드하지 않고 효율적으로 사용가능
+- 이미지를 처리할 transforms들을 Compose해서 정리
+
+__len__ 메서드
+- Dataset의 최대 요소 수 반환
+→ 현재 불러오는 데이터의 인덱스가 적절한 범위 안에 있는지 확인 가능
+
+__getitem__메서드
+- 데이터셋의 idx번째 데이터를 반환하는데 사용된다.
+- 원본데이터를 가져와 전처리하고 데이터 증강하는 부분이 진행된다.
+
+
+
+DataLoader
+- Data의  Batch를 생성해주는 클래스
+- 학습 직전(GPU feed전) 데이터의 변환을 책임
+- Tensor로 변환 + Batch 처리가 메인 업무
+- 병렬적인 데이터 전처리 코드의 고민 필요
+
+→ shuffle : batch를 데이터에서 순차적으로 뽑지 않고 섞어놓고 뽑는 방식
+→ sampler : sampling 방식
+→ num_workers : 프로세스 갯수 지정
+→ collate_fn : 배치의 결과형태를 바꾸어준다. ([feature1, label1], [feature2, label2]... → [feature], [label])
+    ((주로 자연어 처리시) batch의 각 데이터의 크기를 맞추어줄 때 사용한다.)
+
+
+
+
+
+

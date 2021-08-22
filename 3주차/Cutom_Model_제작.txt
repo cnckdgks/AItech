@@ -1,0 +1,109 @@
+Cutom_Model_제작
+
+
+Custom 모델 제작을 위한 Documentation 활용
+- release status : Beta
+  1. "아직 개발중인 기능"
+      - 유저의 피드백에 의해 변할 수 있고
+      - 성능을 더 개선시켜야 하거나
+      - 전체 Operator(+, -, * etc) 기능이 아직 구현되지 않음
+  2. "stable하고 다르게 이전 버전 호환성을 보장하지 않음"
+      - 1.8 버젼에서 사용하던 코드가 1.9 버젼에서는 동작 안할수가 있음
+
+- Matrix Multiplication
+  → torch.mm(브로트캐스팅 X), torch.matmul(브로트캐스팅 O)
+  → torch.smm - sparse matrix에서 사용하는 행렬 곱셈
+  → torch.addmm
+  → torch.einsum - (torch.einsum(“ij,jk->ik”, A, B))
+
+- Norm
+  → torch.linalg.norm : 벡터와 행렬 모두 계산 가능하나 코드를 읽는 사람은 벡터인지 행렬인지 직접 판단해야한다.
+     (벡터와 행렬의 명확한 명시를 위해 torch.linalg.vector_norm, torch.linalg.matrix_norm 사용도 가능)
+  → torch.norm - deprecated 되어서 가능한 사용하지 않는게 좋다.
+
+
+- Tensor : Pytorch의 기본 구성 요소
+  → torch.Tensor vs torch.tensor
+    "torch.Tensor"
+      - 클래스 (Class)
+      - int 입력시 float로 변환
+      - torch 데이터 입력시 입력 받은 데이터의 메모리 공간을 사용
+      - list, numpy 데이터 입력 시 입력 받은 데이터를 복사하여
+      새롭게 torch.Tensor를 만든 후 사용
+    "torch.tensor"
+      - 함수 (Function)
+      - int 입력시 int 그대로 입력
+      - 입력 받은 데이터를 새로운 메모리 공간으로 복사 후 사용
+
+  → 사칙연산 - torch.add, torch.sub, torch.mul, torch.div / numpy like
+  → 인덱싱 - index_select(matrix, col, torch.tensor([row])), view / numpy like
+                 gather (from 2D, 3D, 임의의 크기 3D tensor)로 대각선 요소가져오기 & expand or repeat
+  → 생성 - torch.from_numpy(a), torch.zeros(rdim, cdim), torch.zeros_like(t) : t(tensor)의 크기와 같은 0으로 구성된 tensor반환
+  → Indexing, Slicing, Joining, Mutating Ops  - chunk, swapdims, scatter
+  → Random sampling - randn, randperm, poisson
+  → Point
+
+
+
+
+torch.nn
+그래프를 만들기 위한 basic building block
+
+torch.nn Linear Layers
+- nn.Linear
+- nn.Identity
+- nn.LazyLinear
+
+
+nn.Module 클래스
+- 일련의 기능들을 한 곳에 모아 하나의 모델로 추상화한 클래스
+  (여러 기능들을 한 곳에 모아놓는 상자 역할)
+
+
+nn.Module 모델 제작
+
+torch.nn 의 Container
+
+torch.nn.Sequential
+torch.nn.ModuleList
+torch.nn.ModuleDict
+
+조건문
+
+Parameter
+Buffer - Parameter로 지정하지 않아서 값이 업데이트 되지 않는다 해도
+저장하고싶은 tensor는 Buffer에 등록해준다.
+(get_buffer 메서드가 없다고 뜬다. → colab에서 돌리니 해결... 버전 문제인 것 같다.)
+
+nn.Module
+
+named_children vs named_modules
+named_children - 한 단계 아래의 submodule까지만 표시
+named_modules - 자신에게 속하는 모든 submodule들을 표시
+
+
+get_submodule
+* 역시 없는 모듈로 나옴(colab에서는 돌아감)
+
+
+Parameter
+Buffer
+Docstring
+
+
+extra_repr
+Docstring
+
+hook - 패키지화된 코드에서 다른 프로그래머가
+custom 코드를 중간에 실행시킬 수 있도록 만들어놓은 인터페이스
+- 프로그램의 실행 로직을 분석하거나
+- 프로그램에 추가적인 기능을 제공하고 싶을 때
+
+forward hook
+backward hook
+
+
+apply
+
+
+

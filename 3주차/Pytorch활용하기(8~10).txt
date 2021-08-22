@@ -1,0 +1,108 @@
+08 Multi-GPU 학습
+
+강의 소개
+Model Parallel - Multi-GPU를 사용하기 위해 딥러닝 모델을 병렬화하는 방식
+Data Parallel - 데이터 로딩을 병렬화 하는 방법
+→ 다중 GPU 환경에서 딥러닝을 학습할 때 하드웨어를 효율적으로 사용할 수 있다
+→ GPU가 동작하는 프로세스에 대한 개념을 익힐 수 있다.
+
+
+- 용어 - single/multi, node(컴퓨터)/gpu
+  → Single Node Single GPU, Single Node Multi GPU...
+
+- Model Parallel
+  모델의 병목, 파이프라인의 어려움 등으로 인해 모델 병렬화는 고난이도 과제
+  (* 예전부터 사용했다. : alexnet)
+  → cuda0와 cuda1에 각각 (layer가 쌓인) 모델을 할당
+  → forward 부분에서 두 모델 연결하기
+
+
+- Data Parallel
+  데이터를 나눠 GPU에 할당 후 결과의 평균을 취하는 방법
+  → Pytorch에서는 DataParallel, DistributedDataParallel 두 가지 방식을 제공
+  → DataParallel : 단순히 데이터를 분배한 후 평균을 취함
+     (GPU 사용 불균형 문제 발생, Batch 사이즈 감소, GIL)
+  → DistributedDataParallel : 각 CPU마다 process 생성하여 개별 GPU에 할당
+     (DataParallel을 기본적으로 하지만 개별적으로 연산의 평균을 낸다.)
+
+  → (구현) parallel_model = torch.nn.DataParallel(model)
+
+
+
+
+09 Hyperparameter Tuning
+
+강의 소개
+Ray Tune 프레임워크
+ 여러 Config를 통해 학습할 때 사용되는 Parameter들을
+ 실험자가 손쉽게 지역 최적해를 구할 수 있도록 하는 최적화 방법을 제공
+→ Parameter Search(Grid&Random and Bayesian) 방법론, Pytorch 딥러닝 프로젝트 코드 구성법
+
+
+Further Question
+1. 모델의 모든 layer에서 learning rate가 항상 같아야 할까?
+2. 1개의 하이퍼파라미터만 탐색할 수 있다면 어떤 것을 선택할까?
+
+ 
+Hyperparameter Tuning 
+- 모델 스스로 학습하지 않는 값은 사람이 지정
+(learning rate, 모델의 크기, optimizer 등)
+→ grid search, random search... 최근에는 베이지안 기반 기법들이 주도
+
+Ray (* spark만든 연구실에서 개발) 
+- multi-node multi processing 지원 모듈
+- ML/DL의 병렬 처리를 위해 개발된 모듈이며 분산병렬 ML/DL 모듈의 표준
+
+→ config에 search space 지정 / 학습 스케줄링 알고리즘 지정
+→ 출력 양식 지정
+→ 병렬 처리 양식으로 학습 시행
+
+※ 하이퍼파라미터 튜닝보다 좋은 데이터가 훨씬 중요하니
+모든걸 다 하고 난 뒤에 고려하는 방법으로 생각하면 좋다.
+
+
+
+10 Pytorch Troubleshooting
+
+GPU에서의 Out of Memory(OOM) 상황에 대한 예시와 해결법 제시
+→ GPU 메모리 디버깅을 해주는 툴 소개
+
+- GPU clean후 Run 해준다.
+
+- torch.cuda.empty_cache() 써보기
+  → 사용되지 않는 GPU 상의 cache를 정리
+     (학습하면서 생기는 변수값이 저장이 되는데 나중에 사용되지 않고 쌓이게 된다.)
+  → garbge collector 역할을 강제하도록 한다.
+
+
+- training loop에 tensor로 축적되는 변수는 확인할 것
+반복을 통해 loss값들이 매번 계산되는데 이는 한번만 필요하다.
+하지만 loss값들은 메모리에 쌓이게된다.
+→ 따라서 1-d tensor(loss와 같은)값을 python의 기본 객체로 변환하여 처리해야 한다.
+
+
+- del 명령어를 적절히 사용하기
+필요가 없어진 변수는 적절한 삭제가 필요하다.
+(python은 메모리 배치 특성상 loop가 끝나도 메모리를 차지한다.)
+
+
+- batch 사이즈를 1로 해서 실험해보기
+
+- torch.no_grad() 사용하기
+인퍼런스 시점에서 사용하게되면 역전파에서의 메모리 버퍼 현상이 일어나지 않게된다.
+→ backward pass로 인해 쌓이는 메모리에서 자유로워지게 된다.
+
+- 예상치 못한 에러 메세지
+OOM 말고도 유사한 에러인 CUDNN_STATUS_NOT_INIT이나 device-side-assert 가 있다.
+→ 해당 에러도 cuda 관련 OOM의 일종으로 생각 될 수 있다.
+
+
+- 그외...
+  → colab에서 너무 큰 사이즈는 실행하지 말 것
+  → CNN의 대부분의 에러는 크기가 안 맞아서 생기는 경우
+     (torchsummary 등으로 사이즈를 맞출 것)
+  → tensor의 float precision을 16bit로 줄일 수 있음
+
+
+
+

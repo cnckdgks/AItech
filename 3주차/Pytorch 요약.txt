@@ -1,0 +1,89 @@
+○ Intorduction to Pytorch
+
+- Why Pytorch → Dynamic Computaional Graph
+
+- Pytorch 주요 기능 → Tensor(like numpy), Autograd, Fucntion(about DL)
+
+
+○ Pytorch Basics
+
+- Tensor 정의, 핸들링, 연산 
+  → torch.tensor / ndim, shape
+  → view, squeeze, unsqueeze
+  → dot(vector), mm(matrix), matmul(broadcasting)
+
+- AutoGrad 기능 지원
+
+
+○ Pytorch 구조 학습하기
+
+- 프로젝트 단위 개발 및 템플릿 사용
+
+- Module 구성
+  → config (config.json, parse_config.py, util.py)
+  → train (train.py, trainer.py(base_trainer.py), saved)
+
+(- ngrok)
+
+
+○ Autograd & Optimizer
+
+- nn.Module - input, output, parameter, layer / forward, backword
+- nn.Parameter - 학습 대상이 되는 텐서
+- backward - 학습 절차(순전파 → ouputs → loss → gradient → weight)
+
+
+○ Dataset & DataLoader
+
+- Data, transform - collected, cleaned, preprocessed
+- Dataset (HuggingFace) - 데이터의 입력 형태를 정의하는 클래스 / __init__(), __len__(), __getitem__()
+- DataLoader - Data의 배치를 생성하는 클래스 / batch, shuffle, sampler, num_workers, collate_fn...
+
+
+○ 모델 불러오기
+
+- 모델 저장 및 불러오기 
+  → torch.save(model.state_dict(), os.path.join(MODEL_PATH, "model.pt"))
+  → torch.save(model, os.path.join(MODEL_PATH, "model.pt"))
+  → model = torch.load(os.path.join(MODEL_PATH, "model.pt")
+
+- 저장 기능의 사용 
+  → checkpoints
+  → (pretrained model) TransferLearning (HuggingFace) (& Freezing)
+
+
+○ Monitoring tools for Pytorch
+
+- Tensorboard - 학습 결과의 시각화 지원 툴 (pytorch 연결 가능)
+- weight and biases (wandb) - 실험 결과 기록 및 공유 툴
+
+
+○ Multi-GPU
+
+- Model Parallel - 모델을 나누어 각 GPU에 할당 / forward에서 이어주기
+
+- Data Parallel - 병렬 처리 후 결과의 평균을 취하는 방식 
+  → DataParallel : torch.nn.DataParallel(model)
+  → DistributedDataParallel : data gpu 설정 - multiprocessing 사용 - 모델 학습
+
+
+○ Hyperparameter Tuning
+
+- Ray Tune - Hyperparameter Tuning 작업을 multi-node multi processing 지원해주는 프레임워크
+
+
+○ Pytorch Troubleshooting
+
+- OOM 상황에 대한 예시와 해결법
+  → 학습을하는 반복 구간에서 GPU 메모리가 쌓여서 발생
+  → GPU clean and Run
+  → torch.cuda.empty_cache()
+  → 1-d tensor python 기본 객체로 변환하여 처리
+  → del 명령어 적절히 사용하기
+  → batch 사이즈를 1로 해서 실험해보기
+  → torch.no_grad() 사용하기
+  → OMM 유사 에러 : CUDNN_STATUS_NOT_INIT, device-side-assert
+
+- 그 외 : colab에서 큰 사이즈 실행 X, CNN 사이즈 크기 안맞음, tensor float precision 줄이기
+
+

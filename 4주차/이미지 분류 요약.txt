@@ -1,0 +1,47 @@
+○ 이미지 분류 Overview
+
+강의 내용
+이미지 분류 & EDA → Dataset, Datageneration 
+→ Model → Training & Inference → Ensemble, Experiment toolkits & Tips
+
+
+Special Mission
+- task : 마스크 착용에 관한 image classification 만들기
+- 구성 : dataset.py, loss.py, model.py, train.py, inference.py, evaluation.py
+  → inference.py는 제공되는거 사용하고 CSV 파일로 결과값 제출
+  → 평가는 f1-score 사용
+- Data : 마스크 착용 여부, 성별, 나이를 기준으로 총 18개의 클래스가 있다.
+  → File Structure로 데이터 파일들 확인
+
+강의 진행 구성요소
+P stage의 목적
+
+환경은 Jupyter Notebook or 베이스라인 중 택 1
+
+
+01 Competition with AI Stages!
+
+Pstage - 배운 것들 실습하고 Competiton에서 적용해봐
+
+Competition 구성
+- Overview (방향성을 도출) - 문제정의.
+- Data Description
+- Discussion
+
+Competition Scope
+
+
+02 Image Classification & EDA
+
+- EDA
+- Image(Input) -> Classification Model  -> Class(Output)
+  (task에 맞게 설계하라.)
+
+
+Special Mission - EDA
+- 이미지 데이터에 대해 자유롭게 EDA를 구현하라. (예시와 함께)
+
+
+
+
+

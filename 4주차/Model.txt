@@ -1,0 +1,74 @@
+05 Model1
+
+강의 소개
+- 파이토치 프레임워크의 특징
+- 파이토치의 모델 구성 방법, 파라미터 저장 방식, forward 함수의 동작과정
+
+
+Design Model with Pytorch
+- 모델을 사용하는 사람의 관점이 아닌
+ 모델을 디자인 할 수 있도록 설계된 프레임워크
+- Pytorch의 Pythonic
+
+
+nn.Module
+- __init__()
+- forward()
+
+Parameters
+파라미터 값 확인
+- a.state_dict()
+- list(a.parameters())
+
+파라미터 요소
+data, grad, requires_grad
+
+
+06 Model2 - Pretrained Model
+
+강의 소개
+- 기존에 검증된 우수한 모델 구조와 미리 학습된 weight 재사용 하기
+
+Computer Vision의 발전
+- ImageNet
+
+Pretrained Model의 배경
+모델 일반화를 위해 매번 수 많은 이미지를 학습시키는 것은 까다롭고 비효율적
+
+
+Transfer Learning
+모델을 가져다 쓸 것이라면 가져다 쓸 모델의 문제와
+내가 해결하고자 하는 문제를 비교해 보아야한다.
+
+Case by Case
+Case 1. 문제를 해결하기 위한 학습 데이터가 충분하다.
+- High Similarity : Freezing
+ → 문제 해결 범위가 유사하다면 일부 층을 제외하고 모두 Freezing 시킨다.
+ → Classifier만 고쳐준다.
+- Low Similarity : Fine tuning
+ → 문제 해결 범위가 다르다면 파라미터를 미세 조정하는 작업을 걸쳐야한다.
+
+Case 2. 학습 데이터가 충분하지 않은 경우
+- High Similarity : Freezing
+- Low Similarity : 하지말길...
+
+
+Special Mission - Model
+1. 예시(사진파일 참고)에 맞는 모델 구현 및 Classifier 설계
+
+2. Pretrained Model을 하나 골라서 ImageNet Pretrained Weight가 업데이트(다운로드)된 상태에서
+  2-1. Fine-tuning 시도
+  2-2. Feature Extraction 시도(Backbone Freeze)
+
+
+
+
+
+
+
+
+
+
+
+
+

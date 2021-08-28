@@ -1,0 +1,72 @@
+03 Dataset
+
+강의 소개
+- 데이터 전처리
+- 일반화(Generation) 관점에서 생각해볼 수 있는 몇 가지 skill
+
+강의 영상
+
+Dataset 
+- Vanilla Data를 모델이 좋아하는 형태로 만들어주어야 하기 때문에 필요한 작업이다.
+
+Preprocessing
+- Bounding Box
+- Resize
+- 특징이 강조될 만한 정보만 추출 (ex> filter)
+
+Generalization
+- Bias & Variance
+- train / vaildation / test set
+- Data Augmentation
+  → 주어진 데이터가 가질 수 있는 경우, 상태의 다양성
+  → torch.transforms - RandomCrop, Flip
+  → Albumentations
+
+
+* 무조건 좋은 결과를 가져다 주지 않기 때문에
+스스로 성능을 높일만한 방법에대한 가설을 세우고 적용해보는 과정을 거쳐야 한다.
+
+
+04 Data Generation
+
+강의 소개
+- 효율적으로 데이터를 Feeding 하는 방법
+- Pytorch의 DataSet, DataLoader에 대한 설명과 차이점
+
+강의 영상
+
+Data Feeding
+- Dataset에서 데이터를 생산하는 능력과
+모델이 배치를 처리하는 능력을 고려해서 데이터를 주입해야한다.
+
+torch.utils.data
+- Dataset 
+  → __init__() : 클래스가 처음 선언되었을 때 호출
+  → __getitem__() : 클래스의 데이터 중 index 위치의 아이템을 리턴
+  → __len__() : 클래스 아이템의 전체 길이
+
+- DataLoader
+  → Dataset을 효율적으로 사용할 수 있도록 관련 기능 추가
+
+
+
+Special Mission - Dataset / Data Generation
+
+Mission
+
+1. Vanilla Data → Pytorch Dataset 클래스 생성 (이미지와 해당 클래스 Label을 생성할 수 있는)
+2. torchvision에 내장된 여러 Augmentation 함수 / albumentation 라이브러리의 여러 transform 기법 적용
+
+
+Further Reading
+- 파이토치 공식 Dataset Docs
+- Dataset, DataLoader Tutorials
+- Albumentation과 imgaug
+- catalyst : balanced batch sampler와 같은 API를 제공
+- 깃헙 레포지토리
+
+
+
+
+
+

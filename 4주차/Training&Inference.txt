@@ -1,0 +1,65 @@
+07 Training & Inference1
+
+강의소개
+- 모델 학습에 필요한 요소(Loss, Optimizer, Metric)
+
+
+강의 영상
+
+Loss
+- 오차 역전파 방식으로 loss를 계산한다.
+- nn.Module Family에 속한다.
+- loss.backward()를 하면 nn.Module의 loss 클래스가 작동한다.
+  → 그래디언트 값을 업데이트한다.
+- 조금 특별한 Loss
+  → Focal Loss : Class Imbalance 문제가 있는 경우,
+     맞춘?(출?) 확률이 높은 class는 조금의 loss를 맞춘 확률이 낮은 class는 loss를 훨씬 높게 부여
+     (쉬운 문제 틀릴 경우 loss를 적게 어려운 문제 틀릴 경우 loss를 크게)
+  → Label Smoothing Loss : Class target label을 Onehot 표현으로 사용하기 보다는
+     조금 Soft하게 표현해서 일반화 성능을 높이기 위함
+
+
+Optimizer
+ - 어느 방향으로, 얼마나 움직일지를 정의
+ - LR Scheduler 
+  → 영리하게 움직일수록 수렴은 빨라진다.
+  → 학습 시에 Learning rate을 동적으로 조절
+  → StepLR : 특정 Step마다 LR 감소
+     (scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=2, gamma=0.1))
+  → ConsineAnnealingLR : Consine 함수 형태처럼 LR을 급격히 변경
+  → ReduceLROnPlateau : 더 이상 성능 향상이 없을 때 LR 감소
+
+
+Metric
+- 모델의 평가 지표
+  → Classification : Accuracy, F1-score, precision, recall, ROC&AUC
+  → Accuracy는 클래스 별로 밸런스가 적절히 분포할 때 사용하며
+     F1-score는 클래스 별로 밸런스가 좋지 않아서 각 클래스 별로 성능을 잘 낼 수 있는지 확인할 때 사용한다.
+
+  → Regression : MAE, MSE
+  → Ranking : MRR, NDCG, MAP
+
+- Score의 허와 실
+  → Imbalance하게 클래스가 분포하면 그냥 하나의 클래스로만 찍어도 성능이 높게 나온다.
+
+
+
+08 Training&Inference2
+
+강의 소개
+- 파이토치가 모델의 파라미터를 업데이트하는 과정과 방식
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

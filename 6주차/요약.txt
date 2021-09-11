@@ -1,0 +1,39 @@
+Subword tokenization
+→ language model(RNN, LSTM)
+
+
+
+Subword tokenization
+[필수3]_(Problem)_Subword_level_language_model
+- Subword
+- tokenization, word tokenization, subword tokenization
+
+- 필요성
+→ word tokenizaion일 때 embedding 파라미터 갯수가 
+   rnn모델 파라미터보다 훨씬 많다.
+→ character-level tokenization 역시 지나치게 긴 sequence,
+   성능 저하의 문제를 겪었다.
+→ 그 후 Subword tokenization이 각광받게 되었다.
+
+- 사용하기
+→ transformers 라이브러리의 BertTokenizer 사용
+
+
+[필수4]_(Problem)_Preprocessing_for_NMT_Model
+
+번역 모델을 학습하기 위한 데이터 전처리 기법
+
+class Language
+sentences / word2idx / idx2word
+
+class NMTDataset
+
+
+2. Bucketing
+
+
+
+
+
+
+

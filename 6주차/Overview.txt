@@ -1,0 +1,46 @@
+NLP Overview
+
+1주차
+
+Part1
+NLP 소개 / Bag-of-Words
+Word Embedding
+- one-hot-encoding, Word2Vec, GloVe
+
+Part2
+RNNs / LTSM / GRU
+
+
+Part3
+Sequence to sequence with attention
+Beam search and BLEU score
+
+
+2주차
+Part4
+Transformer
+
+Part5
+Self-supervised Pre-training Models
+
+
+
+Assignment Overview
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

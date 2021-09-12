@@ -1,0 +1,72 @@
+(03강) Recurrent Neural Network and Language Model
+
+RNN을 이용한 Language Model에서 생길 수 있는
+- 초반 time step의 정보를 전달하기 어려운 점
+- gradient vanishing/exploding
+
+
+강의 영상 
+
+○ RNN
+  동일한 파라메터를 가진 모듈이 반복적으로 등장하는 모델
+
+  - 구성요소
+  t시점 입력 벡터, t-1시점 히든 벡터, 가중치 함수
+   → t시점 새로운 히든 벡터
+   → t시점 결과 벡터
+  * 히든 벡터 차원은 임의로 정해주는 하이퍼 파라미터
+
+
+○ RNN 문제 유형
+  one to one 
+  one to many (image captioning : 이미지를 입력하면 이를 설명하는 문장을 출력)
+  many to one (sentiment calssification : 문장을 입력하면 그에 대한 감정을 출력) 
+  many to many 
+  (machine translation : 한국어를 입력하면 영어가 출력,
+  POS tagging: 문장의 단어를 순차적으로 입력하면 대응하는 품사를 출력,
+  Video classification on frame level : 비디오 프레임을 입력하면 실시간으로 분류결과를 출력)
+
+
+○ Character-level Language Model
+  - 연산 순서
+    문자열("hello") → 사전 만들기([h,e,l,o])
+    → one-hot-vector → RNN
+
+  - 활용 예시
+    글 작성, 논문 작성, 코드 작성
+
+  - BPTT (Backpropagation Through Time)
+    time step의 길이가 길어진다면 연산량이 너무 많아진다.
+    → 일정 구간 truncate하여 실시한다.
+    
+  - 히든 스테이트의 일부값을 생성된 문자위에 시각화하면
+   히든 스테이트가 어떤 특징을 기억하고 있음을 확인 할 수 있다.
+
+
+○ Vanishing/Exploding Gradient Problem in RNN
+   Weight값(스칼라로 가정)이 1보다 크다고 했을 때 그래디언트가 무한으로 갈 수있고
+   반대의 경우 거의 영향력이 없는 값이 될 수 있다.
+   → 이를 개선한 모델이 LSTM, GRU
+
+
+(04강) LSTM and GRU
+
+강의 소개
+LSTM, GRU가 gradient flow를 개선할 수 있는 이유
+
+Further Question
+- RNN, LSTM, GRU의 구조를 유지하면서 gradient vanishing / exploding 문제를 완화하는 방법
+- RNN, LSTM, GRU 기반의 language model에서 초반 time step의 정보를 전달하기 어려운 점을 완화할 수 있는 방법
+
+
+○ Long Short-Term Memory (LSTM)
+   단기의 기억(히든 스테이츠)를 조금 더 오래 기억하도록 한다는 의미
+* 구체적 연산 과정 : 사진 참고
+
+
+○ Gated Recurrent Unit (GRU)
+   → LSTM의 셀스테이츠와 히든 스테이츠를  히든 스테이츠로 일원화 했으며
+   GRU 히든 스테이츠는 LSTM의 셀츠테이츠와 비슷한 역할을 한다.
+   → 히든 스테이츠의 값을 계산할 때 더하기가 있어 gradient vanishing/exploding 문제를 해결한다.
+* 구체적 연산 과정 : 사진 참고
+

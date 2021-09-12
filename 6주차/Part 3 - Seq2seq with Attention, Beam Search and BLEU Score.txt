@@ -1,0 +1,116 @@
+Part 3 - Seq2seq with Attention, Beam Search and BLEU Score
+
+(05강) Seq2seq with Attention
+
+강의 소개
+
+Seq2seq with Attention 
+/ Encoder-decoder architecture 
+/ Attention mechanism
+
+
+○ Encoder-decoder architecture
+  RNN task에서 many to many를 표현한 구조
+   → 맨 처음의 입력값의 정보가 출력에 거의 반영되지 못한다.
+   → Attention이 인코더에서 생성된 히든 스테이트를 가지고
+     디코더에서 단어를 생성할 때 그때 그때 필요한 히든스테이츠 벡터를
+     선별해준다.
+
+○ Attention mechanism
+
+  1. Attention Scores : encoder의 각 히든 벡터 값과 decoder 특정 time step의 히든 벡터값을 내적한다.
+  2. Attention Output : Attention Scores를 가중치값으로 하여 encoder의 각 히든 벡터에 적용한 결과
+  3. Attention Output과 특정 time step의 히든 벡터를 concat한다.
+  4. 예측값 : concat 결과에 함수를 적용한 결과 값을 구한다. 
+
+
+○ Seq2Seq 학습 방식
+  - Teacher Forcing : 매 time step마다 올바른 정보만을 입력으로 주는 방식
+    → 예측값을 입력으로 주었을 때 예측값이 한 번 틀리면 그 다음에도 이상한
+      예측값이 나올 경우가 높기때문에 취해주는 방식
+    → 학습이 빠르고 용이하나 실제 상황에서 괴리를 가져올 수 있다.
+
+
+○ Different Attention Mechanisms
+  - 가중치 벡터를 사용하는 방법
+  - 신경망을 사용하는 방법
+    → 특정 encoder의 히든 벡터와 decoder의 히든 벡터를 concat하여
+    신경망을 거쳐 결과 벡터를 만든다.
+    → 이는 역전파가 가능토록한다.
+
+
+○ Attention is Great!
+  - decoder가 encoder의 특정 부분의 정보를 집중할 수 있다.
+  - bottleneck 문제를 해결해준다. 
+    (bottleneck 문제 : 마지막 히든 스테이트 벡터만을 사용하면 긴 문장의 경우 번역이 어려워진다.)
+  - gradient vanishing 문제를 해결해준다. Attention이 encoder의 앞부분에 그래디언트 정보가 바로 전달되도록 한다.
+  - 해석이 가능성이 있다. 즉, 예측을 할 때 encoder의 어떤 부분에 중점을 두었는지 확인할 수 있다.
+ 
+* Attention (score?) distribution matrix를 보면 번역시 어순을 고려하고 있는 것을 볼 수 있다.
+  (강의 자료 : Attention Examples in Machine Translation)
+
+
+
+(06강) Beam Search and BLEU score
+
+강의 소개
+- Beam Search : decoding 하는데 대표적으로 사용하는 알고리즘
+  → 언어모델이 문장을 생성할 때 다양한 경우의 수가 존재하는데
+    일부 경우의 수를 효과적으로 search하는 방법
+- BLEU score : 번역된 문장을 평가하는 대표적인 metric
+
+Further Question
+BLEU score의 단점은?
+
+
+강의 영상
+
+○ Greedy decoding
+  매 time step마다 가장 높은 확률값을 가지는 단어로 예측 결과를 내는 방식
+  → 단어를 하나 잘못 생성하면 이를 고칠 수가 없다.
+  → 확률값이 특정 time step에서 최대라 해도 그 뒤에 값이 급격하게 떨어져 
+    전체 예측력에 문제가 된다.
+
+○ Exhaustive search
+   가능한 문장의 결과를 모두 고려하여 확률값이 최대인 문장을 선택한다.
+   → 복잡도가 매우 높다.
+
+
+○ Beam search
+   매 time step마다 k개의 가능한 경우의 수를 고려하여 
+  가장 확률이 높은 경우를 선택하는 방법
+
+ - 동작과정
+   (1~3을 반복)
+   1. time step 1에서 가장 큰 확률값을 가지는 k개의 단어를 고려한다.
+   2. k개의 경우에 대해 다시 k개의 가장 큰 확률값을 가지느 k개의 단어를 고려한다.
+      (k^2 고려)
+   3. k^2개 중 누적 확률값이 가장 큰 k개를 선택한다.
+
+   4. 정해둔 time step T에서 중단하거나
+     <end> 토큰으로 중단된 문장을 임시 저장하여 
+      n개가 저장되었을 때 중단한다.
+   5. 가장 큰 확률값을 선택하되 단어의 길이를 고려한다.
+     즉, 확률값을 단어의 길이로 나누어 준 뒤 최대값을 고려한다.
+
+
+○ 평가 metric
+  - precision and recall
+    precision : #(correct words) / length_of_prediction
+    recall : #(correct words) / length_of_reference
+
+  - f-score : precision과 recall의 조화평균
+   (산술평균과 기하평균보다 작거나 같게나오기 때문에
+    작은 값에 더 가까운 값을 평균으로 가진다.)
+
+  - BLEU score
+    예측 문장의 어순이 얼마나 정확한지에 대한 지표
+    → N-gram으로 precision을 계산한다.
+    → brevity penalty는 재현율의 역할을 한다.
+   * 그림 참조
+
+
+
+
+
+

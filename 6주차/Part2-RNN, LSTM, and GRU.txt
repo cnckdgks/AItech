@@ -1,6 +1,0 @@
-(03강) Recurrent Neural Network and Language Model
-
-RNN을 이용한 Language Model에서 생길 수 있는
-- 초반 time step의 정보를 전달하기 어려운 점
-- gradient vanishing/exploding
-

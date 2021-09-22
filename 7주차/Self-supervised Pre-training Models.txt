@@ -1,0 +1,154 @@
+(09강) Self-supervised Pre-training Models
+
+강의 소개
+GPT-1과 BERT 
+→ Transfer Learning, Self-supervised Learning, Transformer를 공통적으로 사용
+
+Further Question
+BERT의 Masked Language Model의 단점은?
+(사람이 언어를 배우는 방식과의 차이점의 관점에서)
+
+
+강의 영상
+
+GPT-1
+special tokens를 사용하여 자연어 처리 Task들의 통합된 모델을 제공한다.
+→ 별로의 Label이 필요없는 Text Prediction(Language Model)과
+    (* Self-Supervised Learning)
+    Label이 있는 소량의 데이터에 대한 Task Classifier를 통해
+    Transformer를 학습하게 되고 새로운 Task에 전이학습하여 활용한다.
+
+BERT
+Language Model 중 ELMo라는 모델에서 Lstm을 transformer로 교체한
+모델 중 하나로 BERT가 있다.
+
+Masked Language Model
+문장의 앞뒤 문맥을 보고 하나의 단어를 예측한다.
+→ 보통 15%의 단어를 Mask로 처리한다.
+→ 15% 중에서도 80%를 Mask로
+    10%를 random word로
+    10%를 원래 단어 그대로 둔다.
+
+Next Sentence Prediction
+두 문장이 서로 인접한 문장인가 아닌가를 판단하는 
+Task가 BERT에는 포함되어있다.
+→ 두 문장을 SEP token으로 이어주고 맨 앞에 CLS token을 넣어준다.
+→ Mask부분의 히든 스테이츠 벡터는 단어를 예측하고
+ CLS 부분의 히든 스테이츠는 인접한 문장인지 여부를 예측한다.
+
+BERT Summary
+1. Model Architecture
+- BERT BASE : L=12(Self-Attention Block), H=768, A=12(Attention head의 갯수) 
+- BERT LARGE : L=24(Self-Attention Block), H=1024, A=16(Attention head의 갯수)
+
+2. Input Representation
+- Subword 단위로 하는 WordPiece embeddings 사용
+- Learned positional embedding : 학습을 통해 positional embedding 값을 구한다.
+- Segment Embeddings(sentence A/B embedding) : 첫번째 또는 두번째 문장과 같이 문장의 위치 정보를 주입하는 벡터
+
+BERT & GPT - Bidirectional과 Undirectional의 차이
+
+Machine Reading Comprehension(MRC), Question Answering
+지문을 읽고 질문에 대해 답하는 Task
+→ 지문에서 답에 해당하는 부분을 찾아낸다.
+→ BERT에서 주요 task로 다룬다.
+→ 대표적인 데이터로 SQuAD dataset가 있다.
+→ 각 단어에 대한 히든 스테이트 벡터를 FC1 and Softmax하여
+   정답의 시작 단어를 예측하고 정답의 끝단어도 FC2 and Softmax하여
+   예측한다.
+
+다수 문장에 대한 Task
+→ 4지 선다형일 경우 문제의 문장과 각 보기를 Concat하여
+  4개의 입력 벡터를 만들고 히든 스테이츠 벡터를 예측하고
+  각 벡터를 FC하여 하나의 스칼라로 만든다.
+  4개의 스칼라를 Softmax의 입력으로 주어 정답을 예측한다.
+
+
+BERT의 효과
+model을 깊게 쌓을수록 성능이 좋아진다.
+ 
+
+
+(10강) Advanced Self-supervised Pre-training Models
+
+강의 소개
+- ALBERT와 ELECTRA
+- 지식 그래프 integration
+
+강의 영상
+
+GPT-2
+- GPT-1보다 transformer layer를 더 많이 쌓았고 
+ pre-training으로 여전히 Language Model을 사용한다.
+- 데이터의 크기가 훨씬 증가했고 질적인 부분도 높였다.
+- down-tream tasks가 언어 생성모델에서의 zero-shot setting으로 다루어질 수 있다.
+
+Motivation
+다양한 Task를 Question Answering 형태로 바꾸어 통합하였다.
+
+Datasets
+Reddit이라는 플랫폼에서는 질문이 올라오면 답이 달리는데
+질문에 대한 답이 인기가 일정 수준 이상이면 우수한 품질의 답이라고 판단하고
+이를 학습하였다.
+
+Model
+Layer normalization 위치가 변화하였고
+Layer가 쌓일수록 뒤에있는 Layer의 영향이 줄어들도록
+파라미터의 초기값에 1/root n 을 취하여 더 작은 값으로 만들었다.
+
+Question Answering
+전이학습 전 : 55 F1-score / Fine-tuning 후 89 F1-score
+
+Summarization
+이 또한 추가적인 학습없이도 바로 사용 가능하다.
+
+
+GPT-3
+- transformer의 self-attention block을 GPT-2보다 훨씬 많이 쌓아서
+파라미터 수를 월등하게 많도록 하였다.
+- 많은 데이터와 더 큰 배치크기를 사용하였다.
+- zoro shot에서 one-shot, few-shot의 형태를 시도하면서 성능을 높였다.
+(example을 입력 데이터의 형태로 넣어준다.)
+
+
+ALBERT(A Lite BERT)
+- 기존의 비대한 모델로 인한 단점을 개선하였다.
+- 여러 다른 Task를 추가하였다. (Sentence Order Prediction)
+→ Next Sentence Prediction은 크게 성능향상을 보이지 못했다.
+   (유사 단어만으로도 Task가 풀리기 때문에 성능 향상에 큰 영향이 없다.)
+→ 두 문장이 있을 때 정순서인지 역순서인지 판단하는 Task로 바꾸었다.
+
+- Factorized Embedding parameterization
+→ 입력 벡터를 분해하여 Hidden dimension size를 줄인다.
+    다시 원래의 size로 복원하는 공통의 W벡터를 구한다.
+→ 이러한 방식은 파라미터의 수를 줄여준다.
+
+- 파라미터를 공유하는 방식을 채택한다. 
+  (attention내의 모든 가중치 파라미터를 모든 Layer에서 공유한다.)
+→ 그럼에도 성능이 크게 하락하지 않는다.
+
+
+ELECTRA
+Generator와 Discriminator(ELECTRA)가 적대적으로 학습을 한다.
+(GAN; Generative Adversarial Network)
+
+
+Light-weight Models
+- DistillBERT
+→ 경량화된 student model이 teacher model의 예측 확률분포를
+최대한 모사할 수 있도록 한다. (Knowledge Distillation 기법을 사용)
+- TinyBERT
+→ Knowledge Distillation 기법을 사용함과 동시에 
+teacher model의 임베딩 Layer, 각 self-Attention이 가지는 W들, 히든스테이트 벡터들도
+student model과 유사해 지도록한다.
+(이 때, 두 모델간의 차원이 다를 수 있는데 이 차원을 맞추어주는 FC layer가 있다.) 
+
+
+Knowledge Graph
+문맥을 파악하지만 주어진 데이터 이외의 추가적인 정보에
+대한 것은 파악하지 못한다.
+이를 Knowledge Graph가 해결점을 제시해준다.
+
+
+
+

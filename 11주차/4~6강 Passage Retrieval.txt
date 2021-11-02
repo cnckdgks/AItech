@@ -1,0 +1,124 @@
+(4강) Passage Retrieval - Sparse Embedding
+
+강의 소개
+단어 기반 문서 검색
+- 문서 검색을 위해서는 문서를 embedding 형태로 변환해야 한다.
+  (passage embedding)
+- 단어기반 passage embedding = sparse embedding
+  (ex. TF-IDF)
+
+
+
+(5강) Passage Retrieval - Dense Embedding
+
+강의 소개
+- Sparse Embedding의 한계점
+- Dense Embedding
+
+강의 영상
+1. Introduction to Dense Embedding
+
+ ○ Passage Embedding : 구절을 벡터로 변환하는 것
+    - Sparse Embedding(eg. TF-IDF)을 이용할 경우 Sparse하여
+       유사성 고려가 안 될 수 있다. 다만 중요한 term들이 정확히
+       일치해야 하는 경우 성능이 뛰어나다.
+    - Dense Embedding은 단어의 유사성이나 맥락을 이해해야 할 
+       경우 성능이 뛰어나다.
+     * 최근 사전학습 모델의 등장, 검색 기술의 발전 등으로 인해
+       Dense Embedding을 활발히 이용
+
+
+2. Training Dense Encoder
+
+ ○ Overview of Passage Retrieval with Dense Embedding
+    1> Question q →( BERT for q → W of q ) → hq (cls token의 output 사용)
+    2> Each evidence block b →( BERT for b → W of b ) → hb (cls token의 output 사용)
+    3> Sretr(b, q) = hq.T hb  , from 1> hq, 2> hb
+        (내적으로 q와 b간의 Similarity 구하기)
+    4> Dense embedding을 생성한 인코더 훈련
+       → Positive Passage와 q간의 Similarity를 높게
+        Negative Passage와 q간의 Similarity를 낮게
+
+    0> 연관된 question / passage 찾기 → 기존 MRC 데이터를 사용
+       - Negative sampling
+         → Corpus 내에서 랜덤하게 뽑기
+         → 좀 더 헷갈리는 negative 샘플들 뽑기 (TF-IDF 스코어가 높지만 답을 포함하지 않은 샘플)
+
+    5> Positive에 대한 NLL을 사용한다.
+
+    6> 평가
+       - Top-k retrieval accuracy : retrieve된 passage 중에 답을 포함하는 passage 비율
+
+
+3. Passage Retrieval with Dense Encoder
+   ○ Inference(from dense encoding to retrieval)
+      query와 passage를 각각 embedding한 후, query로부터 가까운 순서대로 passage의 순위를 매김
+
+   ○ From dense encoding to ODQA
+       Retrieval을 통해 찾아낸 Passage를 활용하여 MRC모델로 답을 찾는다.
+
+   ○ 더 좋은 dense encoding 하기
+      - 학습 방법 개선 (eg. DPR)
+      - 인코더 모델 개선 (bert 보다 큰, 정확한 Pretrained 모델)
+      - 데이터 개선 (더 많은 데이터, 전처리 등)
+
+
+(6강) Scaling up with FAISS
+
+강의 소개
+approximate search with FAISS
+- 검색 대상의 scale이 커졌을 때 사용한다.
+
+1. Passage Retrieval and Similarity Search
+- MIPS(Maximum Inner Product Search)
+  q와 p간의 내적값이 가장 큰 p를 찾는 방식
+  → 검색할 p가 실제로 훨씬 방대하여 모든 문서의 임베딩을
+    일일이 보면서 검색할 수 없다.
+
+- Tradeoffs of similarity search
+1) Search Speed - 쿼리당 유사벡터를 찾는데 얼마나 걸리는지?
+   → Pruning
+2) Memory Usage - 벡터를 사용할 때 어디에서 가져올지?
+   → Compression
+3) Accuracy - brute-force 검색 결과와 얼마나 비슷한지?
+   → Exhaustive
+
+2. Approximating Similarity Search
+  - Compression - Scalar Quantization(SQ)
+    vector를 압축하여, 하나의 vector가 적은 용량을 차지
+  - Pruning - Inverted File(IVF)
+    Search space를 줄여 search 속도 개선(dataset의 subset만 방문)
+    → Clustering + Inverted file을 활용한 search
+      1) Clustering : 전체 vector space를 k 개의 cluster로 나눈다.
+      2) Inverted file (IVF) : vector의 index = inverted list structure
+        → 각 cluster의 centroid id와 해당 cluster의 vector들이 연결되어있는 형태
+
+  - 연산 과정
+    1) 주어진 query vector에 대해 근접한 centroid 벡터를 찾는다.
+    2) 찾은 cluster의 inverted list 내 vector들에 대해 서치 수행
+
+
+3. Introduction to FAISS
+   Library for efficient similarity search
+
+   Passage Retrieval with FAISS
+   1) Train index and map vectors
+      index를 훈련하여 IVF를 생성하고 add index로 P를 넣어준다.
+     → 보통은 한번에 하지만 데이터양이 너무 클 때
+      일부만을 가지고 학습을 진행하고 나머지를 추가해주는 방식으로 한다.
+
+   2) Search based on FAISS index
+     * nprobe : 몇 개의 가장 가까운 cluter를 방문하여 search할 것인지
+
+
+4. Scailing up with FAISS
+  - brute-force
+  - IVF
+  - IVF-PQ
+  - Using GPU
+  - Using Multi GPU
+
+
+
+
+

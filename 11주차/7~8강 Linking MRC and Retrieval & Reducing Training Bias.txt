@@ -1,0 +1,15 @@
+(7강) Linking MRC and Retrieval
+
+강의 소개
+retriever-reader approach
+- 기계독해(reader)와 문서검색(retriever)를 붙이는 방법과
+  이를 통해 ODQA를 풀기 
+
+
+(8강) Reducing Training Bias
+
+강의 소개
+- Open-domain QA 문제를 풀 때 발생할 수 있는 bias
+- bias 해결방법
+
+

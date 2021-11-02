@@ -1,0 +1,32 @@
+◎ MRC Overview
+
+  ○ 기계독해 (Machine Reading Comprehension)와
+     질의응답 (Question Answering) 
+     (with 초대형 데이터셋을 효율적으로 다루는 방법)
+
+     - 추출기반 기계독해
+     - 생성기반 기계독해
+
+  ○ 문서 검색
+
+     - 단어기반 문서 검색
+     - 임베딩 기반 문서 검색
+     - Faiss로 스케일 업
+
+  ○ 기계독해와 문서검색 연결하기
+
+
+◎ MRC 대회 안내
+
+  - QA : 다양한 종류의 질문에 대해 대답하는 인공지능
+  - ODQA : 주어진 지문이 따로 존재하지 않고 사전에 구축되어있는
+    Knowledge resource에서 질문에 대답할 수 있는 문서를 찾는 과정이 추가된다.
+
+  ○ Linking MRC and Retrieval : Open Domain Question Answering
+     - retriever 단계 : 질문에 관련된 문서를 찾아준다.
+     - reader 단계 : 관련된 문서를 읽고 적절한 답변을 찾아준다.
+
+
+
+
+

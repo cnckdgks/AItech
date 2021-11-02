@@ -1,0 +1,60 @@
+
+Practice1 : Looking_into_KorQuAD
+
+데이터셋 불러오기
+→ 데이터셋 둘러보기
+→ 토크나이징 해보기
+   - tokenizer.tokenize(example_text)      
+     # tokenize하기 
+   - tokenizer(example_text)                 
+     # tokenize한 뒤 임베딩하기 & Attention mask 생성
+   - ' '.join(tokenizer.tokenize(example_text)).replace(' ##', '')
+     # 역 tokenize하기
+   - tokenizer.decode(tokenizer(example_text)['input_ids'])
+     # tokenize한 뒤 임베딩 결과를 다시 원래의 형태로 변환
+
+※ cased vs. uncased
+1. lowercasing
+BERT uncased : OpenGenus -> opengenus
+BERT cased : OpenGenus
+
+2. accent striping
+BERT uncased : OpènGènus -> opengenus
+BERT cased : OpènGènus
+
+3. unicode normalization (NFD)
+BERT uncased : 안녕 -> ㅇ, ㅏ, ㄴ, ㄴ, ㅕ, ㅇ
+
+→ 전처리 하기
+prepare_train_feartures 
+- tokenize 이후에 답의 위치를 재설정해주는 작업
+
+→ 평가 지표 계산하기
+- EM과 f1 값을 계산하는 작업
+
+
+Practice2-3 : Extraction/Generation_based_MRC
+
+→ Fine-tuning하기
+   - Pre-training 모델 불러오기
+   - post_processing_function
+
+Practice4 : TF_IDF_Passage_Retrieval
+   - corpus / 토크나이저 준비
+   - TF-IDF embedding 만들기
+   - passage retrieval 적용
+
+Practice5 : Dense_Passage_Retrieval
+   - tokenize 하기
+   - Passage - [positive1, negative1, negative2..., positive2, negative1, negative2...]
+     to [[positive1, negative1,...], [positive2, negative1,...]로 배치화하기
+   - Encoder 정의 후 train
+     In-batch negative 방식을 취한다.
+     → examples(questions, passages)이 batch로 들어오게 되는데
+     각 Question과 대응하는 passage의 similarity score는 최대화 시키면서
+     그렇지 않은 passages간 similarity score는 최소화 시키는 방식
+   - valid_output에 대해 dot_product로 top_k구하기
+
+
+
+

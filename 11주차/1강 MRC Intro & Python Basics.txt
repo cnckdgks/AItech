@@ -1,0 +1,98 @@
+강의소개
+
+기계독해에 대한 소개 & 파이썬 지식
+ 기계독해란? / Unicode / tokenization
+ with KorQuAD
+
+강의 영상
+
+1. Intro MRC
+
+- 기계 독해(MRC) 정의
+주어진 지문(Context)를 이해하고, 주어진 질의의 답변을 추론하는 문제
+
+- 기계 독해(MRC) 종류
+  1) Extractive Answer Datasets
+    질의(question)에 대한 답이 항상 주어진 지문의 segment로 존재
+  2) Descriptive/Narrative Answer Datasets
+    답이 지문 내에서 추출한 span이 아니라, 질의를 보고 생성된 sentence의 형태
+  3) Multiple-choice Datasets
+    질의에 대한 답을 여러 개의 answer candidates 중 하나로 고르는 형태
+
+- MRC Datasets
+
+- Challenges in MRC
+  - 단어들의 구성이 유사하지는 않지만 동일한 의미의 문장을 이해
+  Dataset example : DuoRC(paraphrased paragragh) / QuoRef(coreference resolution)
+
+  - Unanswerable questions
+
+  - Multi-hop reasoning
+    여러 개의 document에서 질의에 대한 supporting fact를 찾아야지만 답을 찾을 수 있음
+
+- MRC의 평가방법
+  1) Exact Match / F1 Score : For extractive answer and multiple-choice answer datasets
+     Exact Match(EM) or Accuracy
+       예측한 답과 ground-truth이 정확히 일치하는 샘플의 비율
+     F1
+       예측한 답과 ground-truth 사이의 token overlap을 F1으로 계산
+
+  2) ROUGE-L / BLEU : For descriptive answer datasets
+    Ground-truth과 예측한 답 사이의 overlap을 계산
+    ROUGE-L Score
+    예측한 값과 ground-truth 사이의 overlap recall
+    (L - LCS(Longest common subsequence)기반)
+    BLEU(Bilingual Evaluation Understudy)
+    예측한 답과 ground-truth 사이의 precision
+    (uniform n-gram weight)
+
+2. Unicode & Tokenization
+
+- Unicode란
+  전 세계의 모든 문자를 일관되게 표현하고 다룰 수 있도록 만들어진 문자셋
+  (각 문자마다 숫자 하나에 매핑한다.)
+
+- 인코딩 & UTF-8
+  인코딩이란?
+   문자를 컴퓨터에서 저장 및 처리할 수 있게 이진수로 바꾸는 것
+  UTF-8(Unicode Transformation Format)
+   UTF-8은 현재 가장 많이 쓰는 인코딩 방식으로 문자 타입에 따라
+  다른 길이의 바이트를 할당한다.
+
+- Python에서 Unicode 다루기
+    ord
+    문자 → 유니코드 code point
+    chr
+    유니코드 code point → 문자
+
+- Unicode와 한국어
+  완성형
+  현대 한국어의 자모 조합으로 나타낼수 있는 모든 완성형 한글
+  → 11172자
+  조합형
+  조합하여 글자를 만들 수 있는 초, 중, 종성
+
+- 토크나이징
+  텍스트를 토큰 단위로 나누는 것
+  단어(띄어쓰기 기준), 형태소, subword 등 여러 토큰 기준이 사용된다.
+
+  Subword 토크나이징
+  자주 쓰이는 글자 조합은 한 단위로 취급하고, 
+  자주 쓰이지 않는 조합은 subword로 쪼갠다.
+  → ##은 디코딩(토크나이징의 반대 과정)을 할 때
+  해당 토큰을 앞 토큰에 띄어쓰기 없이 붙인다는 것을 의미
+
+  BPE(Byte-Pair Encoding)
+  데이터 압축용으로 제안된 알고리즘
+
+3. Looking into the Dataset (KorQuAD)
+
+
+
+
+
+
+
+
+
+
